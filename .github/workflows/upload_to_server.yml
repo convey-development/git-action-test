@@ -1,0 +1,22 @@
+name: Upload source code to server
+
+on:
+  workflow_dispatch:
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Install SSH key
+      uses: shimataro/ssh-key-action@v2
+      with:
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        known_hosts: ${{ secrets.KNOWN_HOSTS }}
+
+    - name: Upload source code
+      run: |
+        rsync -avz --delete ./ convey.business@ssh.gb.stackcp.com:/home/sites/15a/f/fc05c3f35d/
